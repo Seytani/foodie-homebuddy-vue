@@ -1,0 +1,49 @@
+.navbar {
+  box-shadow: 3px 0 20px #ced4daff;
+  padding-top: 20px;
+  position: relative;
+  width: 250px;
+  text-align: center;
+
+  .logo {
+    color: $color-green-2;
+    font-family: 'Pacifico';
+    font-size: 40px;
+    margin-bottom: 40px;
+
+    &__subtitle {
+      color: $color-gray-3;
+      font-family: 'Montserrat';
+      font-size: 12px;
+      font-weight: bold;
+      display: block;
+    }
+  }
+
+  .menu {
+    color: $color-gray-3;
+    margin-top: 80px;
+    text-align: left;
+
+    li {
+      margin-bottom: 35px;
+    }
+    
+    &__item {
+      height: 40px;
+      padding-left: 30px;
+      width: 100%;
+
+      &.router-link-active,
+      &:hover {
+        border-right: 5px solid $color-green-2;
+        color: $color-green-2;
+        font-weight: 600;
+      }
+
+      .icon {
+        margin-right: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+/* Parent properties */
+.d-flex {
+    display: flex;
+}
+
+.d-iflex {
+  display: inline-flex;
+}
+
+.fd-column {
+    flex-direction: column;
+}
+
+.fai-center {
+    align-items: center;
+}
+
+.fai-baseline {
+    align-items: baseline;
+}
+
+.fac-center {
+    align-content: center;
+}
+
+.fjc-center {
+    justify-content: center;
+}
+
+.fjc-flex-end {
+    justify-content: flex-end;
+}
+
+.fjc-space-between {
+    justify-content: space-between;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+/* Child properties */
+.fas-flex-end {
+    align-self: flex-end;
+}
+
+.fgrow-1 {
+    flex-grow: 1;
+}
+
+.forder-2 {
+    order: 2;
+}
+
+$sizes: 5, 10, 15, 20, 30, 40;
+
+@each $size in $sizes {
+    .mb-#{$size} {
+        margin-bottom: #{$size}px;
+    }
+}
+
+@each $size in $sizes {
+    .ml-#{$size} {
+        margin-left: #{$size}px;
+    }
+}
+
+@each $size in $sizes {
+    .mr-#{$size} {
+        margin-right: #{$size}px;
+    }
+}
+
+.shadow-box {
+    box-shadow: 0 4px 10px $color-gray-2
+}
