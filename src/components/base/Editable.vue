@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'Editable',
+  name: 'FEditable',
 }
 </script>
 

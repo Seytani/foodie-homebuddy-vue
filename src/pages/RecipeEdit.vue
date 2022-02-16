@@ -1,13 +1,12 @@
 <template>
-  <div v-if="!recipe">
-    ...Loading
-  </div>
-  <div v-else class="recipe-edit">
+  <div class="recipe-edit">
     <div class="recipe-edit__header d-flex mb-30">
       <div class="info fgrow-1">
-        <h1 class="info__title mb-20">
-          {{ recipe.name }}
-        </h1>
+        <f-editable class="mb-20">
+          <h1 class="info__title">
+            {{ recipe.name || 'My Recipe' }}
+          </h1>
+        </f-editable>
         <div class="info__last-prep mb-20">
           Last prep: <span>3 weeks ago</span>
         </div>
@@ -49,15 +48,28 @@
       </div>
     </div>
     <hr class="mb-20">
-    <div>
-      <h4>Ingredients</h4>
+    <div class="ingredients mb-20">
+      <h4 class="mb-20">Ingredients</h4>
+      <f-button>Add Ingredient</f-button>
     </div>
+    <editor v-model="content" />
   </div>
 </template>
 
 <script>
+import Editor from "@/components/editor/Editor.vue";
+
 export default {
   name: 'RecipeEdit',
+
+  components: { Editor },
+
+  data() {
+    return {
+      name: '',
+      content: '',
+    };
+  },
 
   computed: {
     recipeId() {
@@ -70,6 +82,9 @@ export default {
   },
 
   mounted() {
+    if (!this.recipeId || this.recipeId === 'new') {
+      return;
+    }
     this.$store.dispatch('recipes/fetchRecipe', this.recipeId);
   },
 
@@ -86,6 +101,7 @@ export default {
   width: 980px;
   margin: 0 auto;
   padding-top: 60px;
+  padding-bottom: 40px;
 
   &__header {
     .info {
