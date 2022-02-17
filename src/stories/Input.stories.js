@@ -15,4 +15,4 @@ const Template = args => ({
     template: '<Input />'
 });
 
-//export const Default = Template.bind({});
+export const Default = Template.bind({});

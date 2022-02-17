@@ -38,9 +38,12 @@ hr {
 }
 
 input {
-  border: none;
-  border-bottom: solid 2px $color-gray-2;
-  outline: none;
+  background-color: transparent;
+  border-style: none;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .material-icons {

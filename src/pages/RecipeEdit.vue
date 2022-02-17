@@ -77,7 +77,7 @@ export default {
     },
 
     recipe() {
-      return this.$store.state.recipes.recipes?.[this.recipeId];
+      return this.$store.state.recipes.recipes?.[this.recipeId] || {};
     }
   },
 
