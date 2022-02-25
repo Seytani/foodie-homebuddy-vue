@@ -12,7 +12,10 @@ const Template = args => ({
         return { args }
     },
 
-    template: '<Input />'
+    template: '<Input v-bind="args" />'
 });
 
 export const Default = Template.bind({});
+Default.args = {
+  'modelValue': 'Test',
+}

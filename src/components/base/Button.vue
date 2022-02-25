@@ -2,7 +2,7 @@
   <button
     class="btn"
     :class="extraClasses"
-    @click="$emit('click')"
+    @click="$emit('click', $event)"
   >
     <slot />
   </button>
@@ -61,6 +61,15 @@ export default {
 		padding: 0;
 		display: flex;
 	}
+
+  &.btn-invisible {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    color: unset;
+    min-width: 0;
+  }
 }
 
 [disabled] {

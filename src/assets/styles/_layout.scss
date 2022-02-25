@@ -35,6 +35,11 @@
     justify-content: space-between;
 }
 
+.fjc-space-around {
+    justify-content: space-around;
+}
+
+
 .flex-wrap {
     flex-wrap: wrap;
 }
@@ -74,4 +79,8 @@ $sizes: 5, 10, 15, 20, 30, 40;
 
 .shadow-box {
     box-shadow: 0 4px 10px $color-gray-2
+}
+
+.hidden {
+  display: none;
 }

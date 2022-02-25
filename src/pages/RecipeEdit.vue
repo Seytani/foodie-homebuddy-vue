@@ -2,10 +2,16 @@
   <div class="recipe-edit">
     <div class="recipe-edit__header d-flex mb-30">
       <div class="info fgrow-1">
-        <f-editable class="mb-20">
-          <h1 class="info__title">
-            {{ recipe.name || 'My Recipe' }}
+        <f-editable class="mb-20"
+          :show-controls="showNameFieldControls"
+          @click="toggleEditNameField"
+          @cancel="toggleEditNameField"
+          @ok="saveName"
+        >
+          <h1 v-if="!showNameFieldInput" class="info__title">
+            {{ name }}
           </h1>
+          <f-input v-model="name" label="Recipe Name" v-else />
         </f-editable>
         <div class="info__last-prep mb-20">
           Last prep: <span>3 weeks ago</span>
@@ -43,9 +49,10 @@
           <f-button @click="handleAddToMealPlan">Add to meal plan</f-button>
         </div>
       </div>
-      <div class="recipe-edit__image">
-        <img src="/default-recipe.jpg" alt="">
-      </div>
+      <recipe-image
+        :image="recipeImageUrl"
+        @save="saveImage"
+      />
     </div>
     <hr class="mb-20">
     <div class="ingredients mb-20">
@@ -57,17 +64,23 @@
 </template>
 
 <script>
-import Editor from "@/components/editor/Editor.vue";
+import debounce from 'lodash/fp/debounce';
+import 'vue-advanced-cropper/dist/style.css';
+import Editor from "@/components/recipes/editor/Editor.vue";
+import RecipeImage from '@/components/recipes/RecipeImage.vue';
 
 export default {
   name: 'RecipeEdit',
 
-  components: { Editor },
+  components: { Editor, RecipeImage },
 
   data() {
     return {
-      name: '',
       content: '',
+      name: '',
+      showNameFieldInput: false,
+      showNameFieldControls: false,
+      showCropper: false,
     };
   },
 
@@ -77,21 +90,67 @@ export default {
     },
 
     recipe() {
-      return this.$store.state.recipes.recipes?.[this.recipeId] || {};
+      return this.$store.state.recipes.recipes?.[this.recipeId] || null;
+    },
+
+    recipeImageUrl() {
+      if (!this.recipe?.image_url) {
+        return '/default-recipe.jpg';
+      }
+      return process.env.VUE_APP_IMAGE_STORE + this.recipe.image_url;
+    },
+
+    debounceSaveContent() {
+      return debounce(900, this.saveContent);
     }
   },
 
-  mounted() {
+  watch: {
+    content(value) {
+      const isSame = this.recipe.content === value;
+      if (isSame) {
+        return;
+      }
+      this.debounceSaveContent();
+    }
+  },
+
+  async mounted() {
     if (!this.recipeId || this.recipeId === 'new') {
       return;
     }
-    this.$store.dispatch('recipes/fetchRecipe', this.recipeId);
+    await this.$store.dispatch('recipes/fetchRecipe', this.recipeId);
+    this.name = this.recipe.name || 'My Recipe';
+    this.content = this.recipe.content;
   },
 
   methods: {
     handleAddToMealPlan() {
       alert('working');
-    }
+    },
+
+    toggleEditNameField() {
+      this.name = this.recipe.name || 'My Recipe';
+      this.showNameFieldInput = !this.showNameFieldInput;
+      this.showNameFieldControls = !this.showNameFieldControls;
+    },
+
+    async saveImage(blob) {
+      const payload = { id: this.recipe.id, blob };
+      await this.$store.dispatch('recipes/updateRecipeImage', payload);
+    },
+
+
+    async saveName() {
+      const payload = { id: this.recipe.id, name: this.name };
+      await this.$store.dispatch('recipes/updateRecipe', payload);
+      this.toggleEditNameField();
+    },
+
+    async saveContent() {
+      const payload = { id: this.recipe.id, content: this.content };
+      await this.$store.dispatch('recipes/updateRecipe', payload);
+    },
   },
 }
 </script>
@@ -105,6 +164,8 @@ export default {
 
   &__header {
     .info {
+      padding-right: 40px;
+
       &__last-prep {
         span {
           color: $color-blue-2
@@ -142,9 +203,42 @@ export default {
   }
 
   &__image {
+    position: relative;
     border-radius: 25px;
     height: 480px;
+    min-width: 480px;
     overflow: hidden;
+
+    &:hover {
+      .curtain {
+        opacity: .3;
+      }
+
+      .edit {
+        opacity: 1;
+      }
+    }
+
+    .curtain,
+    .edit {
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      right: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .curtain {
+      background-color: $color-green-3;
+    }
+
+    .edit {
+      &__icon {
+        color: white;
+        font-size: 80px;
+      }
+    }
 
     img {
       width: 480px;

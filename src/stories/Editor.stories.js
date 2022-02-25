@@ -1,4 +1,4 @@
-import Editor from '@/components/editor/Editor.vue';
+import Editor from '@/components/recipes/editor/Editor.vue';
 
 export default {
   title: 'Other/Editor',

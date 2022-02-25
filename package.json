@@ -15,7 +15,9 @@
     "@websanova/vue-auth": "^4.1.11",
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.21",
     "vue": "^3.0.0",
+    "vue-advanced-cropper": "^2.8.1",
     "vue-axios": "^3.4.1",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"

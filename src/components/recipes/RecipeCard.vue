@@ -1,6 +1,6 @@
 <template>
   <div class="recipe">
-    <img src="/roasted-veggies.jpg" alt="recipe placeholder" class="recipe__image">
+    <img :src="recipeImage" alt="recipe placeholder" class="recipe__image">
     <div class="recipe__desc">
       <h5 class="title">
         {{ recipe.name }}
@@ -27,6 +27,15 @@ export default {
     recipe: {
       type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    recipeImage() {
+      if (this.recipe?.image_url) {
+        return process.env.VUE_APP_IMAGE_STORE + this.recipe.image_url;
+      }
+      return '/roasted-veggies.jpg';
     },
   },
 };

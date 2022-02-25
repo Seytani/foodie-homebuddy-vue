@@ -30,9 +30,19 @@ export default {
     };
   },
 
+  watch: {
+    modelValue(value) {
+      const isSame = this.editor.getHTML() === value;
+      if (isSame) {
+        return;
+      }
+      this.editor.commands.setContent(value, false);
+    },
+  },
+
   mounted() {
     this.editor = new Editor({
-      content: '<p>editor content</p>',
+      content: this.modelValue,
       extensions: [ StarterKit ],
       onUpdate: props => {
         this.$emit('update:modelValue', props.editor.getHTML());

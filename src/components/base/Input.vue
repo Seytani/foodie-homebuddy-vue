@@ -1,16 +1,18 @@
 <template>
   <div class="input">
-    <div class="input__container d-flex" :class="{ active }">
+    <div class="input__container d-flex" :class="{ active, 'has-content': hasContent }">
       <label
         class="input__label"
-        :class="{ active }"
+        :class="{ active, 'has-content': hasContent }"
         for=""
       >
-        Label
+        {{ this.label }}
       </label>
       <input
         class="input__input"
         type="text"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
         @focus="active = true"
         @blur="active = false"
       >
@@ -22,16 +24,42 @@
 export default {
   name: 'FInput',
 
+  props: {
+    modelValue: {
+      type: String,
+      default: '',
+    },
+    label: {
+      type: String,
+      default: '',
+    }
+  },
+
+  emits: ['update:modelValue'],
+
   data() {
     return {
       active: false,
+      hasContent: false,
     };
+  },
+
+  watch: {
+    modelValue(newValue) {
+      this.hasContent = !!newValue;
+    }
+  },
+
+  mounted() {
+    this.hasContent = !!this.modelValue;
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .input {
+  width: 100%;
+
     &__container {
         position: relative;
 
@@ -43,6 +71,10 @@ export default {
             content: "";
             position: absolute;
             width: 100%;
+        }
+
+        &.active::before {
+          border-color: $color-green-4;
         }
 
         &::after {
@@ -72,11 +104,16 @@ export default {
 
         &.active {
           color: $color-green-4;
-          transform: translateY(-18px) scale(.75);
+          transform: translateY(-18px) translateX(-15px) scale(.75);
+        }
+
+        &.has-content {
+          transform: translateY(-18px) translateX(-15px) scale(.75);
         }
     } 
 
     &__input {
+        font-size: 16px;
         width: 100%;
     }
 }
