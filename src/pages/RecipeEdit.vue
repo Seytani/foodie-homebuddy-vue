@@ -57,7 +57,12 @@
     <hr class="mb-20">
     <div class="ingredients mb-20">
       <h4 class="mb-20">Ingredients</h4>
-      <f-button>Add Ingredient</f-button>
+      <div v-show="showIngredientForm" class="ingredients__form">
+        <f-input v-model="ingredientQuery" />
+      </div>
+      <f-button @click="showIngredientForm = true;">
+        Add Ingredient
+      </f-button>
     </div>
     <editor v-model="content" />
   </div>
@@ -81,6 +86,8 @@ export default {
       showNameFieldInput: false,
       showNameFieldControls: false,
       showCropper: false,
+      showIngredientForm: false,
+      ingredientQuery: '',
     };
   },
 
@@ -242,6 +249,12 @@ export default {
 
     img {
       width: 480px;
+    }
+  }
+
+  .ingredients {
+    &__form {
+      width: 300px;
     }
   }
 }
